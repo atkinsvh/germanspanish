@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>German or Spanish Flashcards + opt. timer</title>
+</head>
+<body>
+	<h1> Directions: The main directive is to make the timer as low as possible and finish as many possible flashcards you feel comfortable with and time your concentration and performance levels. I understand it is a lot for a person to conform to three langauges so I will postpone pulling in more langauages. For know.. the two languages going to be available are German and Spanish. </h1>
+
+
+	Global Objects to use- get time (to dislay the time)
+
+	<input Consider putting your best guess at the word here! >
+
+	<script>
+		(function () {
+  var bio      = document.getElementById('bio'),        // <textarea> element
+      bioCount = document.getElementById('bio-count');  // Character count el
+
+  addEvent(bio, 'focus', updateCounter);       // Call updateCounter() on focus
+  addEvent(bio, 'input', updateCounter);       // Call updateCounter() on input
+
+  addEvent(bio, 'blur', function () {          // On leaving the element
+    if (bio.value.length <= 140) {             // If bio is not too long
+      bioCount.className = 'hide';             // Hide the counter
+    }
+  });
+
+  function updateCounter(e) {
+    var target = e.target || e.srcElement;      // Get the target of the event
+    var count = 140 - target.value.length;      // How many characters are left
+    if (count < 0) {                            // If less than 0 chars free
+      bioCount.className = 'error';             // Add class of error
+    } else if (count <= 15) {                   // If less than 15 chars free
+      bioCount.className = 'warn';              // Add class of warn
+    } else {                                    // Otherwise
+      bioCount.className = 'good';              // Add class of good
+    }
+    var charMsg = '<b>' + count + '</b>' + ' characters'; // Message to display
+    bioCount.innerHTML = charMsg;               // Update the counter element
+  }
+
+}());
+</script>
+
+
+</body>
+</html>
