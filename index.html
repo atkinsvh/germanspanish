@@ -1,49 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>German or Spanish Flashcards + opt. timer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German or Spanish Flashcards + opt. timer</title>
 </head>
 <body>
-	<h1> Directions: The main directive is to make the timer as low as possible and finish as many possible flashcards you feel comfortable with and time your concentration and performance levels. I understand it is a lot for a person to conform to three langauges so I will postpone pulling in more langauages. For know.. the two languages going to be available are German and Spanish. </h1>
+    <h1>Directions: The main directive is to make the timer as low as possible and finish as many possible flashcards you feel comfortable with and time your concentration and performance levels. I understand it is a lot for a person to conform to three languages so I will postpone pulling in more languages. For now, the two languages going to be available are German and Spanish.</h1>
 
+    <div id="flashcard"></div>
+    <div id="timer">Timer: <span id="time">0:00</span></div>
+    <button id="nextButton">Next Flashcard</button>
 
-	Global Objects to use- get time (to dislay the time)
+    <script>
+        const flashcards = [
+            { language: "German", word: "Guten Tag", translation: "Good day" },
+            { language: "Spanish", word: "Hola", translation: "Hello" },
+            // Add more flashcards as needed
+        ];
 
-	<input Consider putting your best guess at the word here! >
+        let currentIndex = 0;
+        let startTime;
+        let timerInterval;
 
-	<script>
-		(function () {
-  var bio      = document.getElementById('bio'),        // <textarea> element
-      bioCount = document.getElementById('bio-count');  // Character count el
+        function displayFlashcard(index) {
+            const card = flashcards[index];
+            document.getElementById('flashcard').innerHTML = `<h2>${card.language} Flashcard</h2>
+                <p><strong>${card.word}</strong> - ${card.translation}</p>`;
+        }
 
-  addEvent(bio, 'focus', updateCounter);       // Call updateCounter() on focus
-  addEvent(bio, 'input', updateCounter);       // Call updateCounter() on input
+        function startTimer() {
+            startTime = new Date().getTime();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
 
-  addEvent(bio, 'blur', function () {          // On leaving the element
-    if (bio.value.length <= 140) {             // If bio is not too long
-      bioCount.className = 'hide';             // Hide the counter
-    }
-  });
+        function updateTimer() {
+            const currentTime = new Date().getTime();
+            const elapsedTime = currentTime - startTime;
+            const minutes = Math.floor(elapsedTime / (1000 * 60));
+            const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+            document.getElementById('time').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
 
-  function updateCounter(e) {
-    var target = e.target || e.srcElement;      // Get the target of the event
-    var count = 140 - target.value.length;      // How many characters are left
-    if (count < 0) {                            // If less than 0 chars free
-      bioCount.className = 'error';             // Add class of error
-    } else if (count <= 15) {                   // If less than 15 chars free
-      bioCount.className = 'warn';              // Add class of warn
-    } else {                                    // Otherwise
-      bioCount.className = 'good';              // Add class of good
-    }
-    var charMsg = '<b>' + count + '</b>' + ' characters'; // Message to display
-    bioCount.innerHTML = charMsg;               // Update the counter element
-  }
+        function nextFlashcard() {
+            currentIndex++;
+            if (currentIndex >= flashcards.length) {
+                clearInterval(timerInterval);
+                alert("You have completed all flashcards!");
+            } else {
+                displayFlashcard(currentIndex);
+            }
+        }
 
-}());
-</script>
+        displayFlashcard(currentIndex);
+        startTimer();
 
-
+        // Add event listener to the next button
+        document.getElementById('nextButton').addEventListener('click', nextFlashcard);
+    </script>
 </body>
 </html>
